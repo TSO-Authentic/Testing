@@ -1,0 +1,1192 @@
+What is Agentic Development?
+
+Agentic Development is a way of developing software where an AI agent can take a goal, understand the project, make a plan, use tools, modify files, run commands/tests, inspect the results, and continue working until the task is completed or it needs human intervention.
+
+Traditional development:
+
+Developer
+   ↓
+Think about solution
+   ↓
+Write code
+   ↓
+Run test
+   ↓
+Fix error
+   ↓
+Repeat
+
+AI-assisted development:
+
+Developer
+   ↓
+AI suggests code
+   ↓
+Developer reviews
+   ↓
+Developer writes/runs/tests
+
+Agentic development:
+
+Developer
+   ↓
+Give goal
+   ↓
+AI understands context
+   ↓
+AI creates plan
+   ↓
+AI modifies files
+   ↓
+AI runs tools/tests
+   ↓
+AI observes results
+   ↓
+AI fixes problems
+   ↓
+AI verifies
+   ↓
+Developer reviews/approves
+Simple example
+
+Suppose you say:
+
+"Add a password reset feature to this application."
+
+A simple coding assistant might generate:
+
+@PostMapping("/reset-password")
+public void resetPassword(...) {
+    ...
+}
+
+An agent can potentially reason about the whole task:
+
+1. Inspect existing authentication architecture
+2. Find User entity
+3. Find authentication service
+4. Find email service
+5. Design password-reset flow
+6. Add database fields/table if necessary
+7. Create API
+8. Create service logic
+9. Create tests
+10. Run tests
+11. Fix failures
+12. Summarize changes
+
+That difference—from generating code to pursuing a goal through multiple actions—is the heart of agentic development.
+
+2. Code Completion
+
+Code Completion is the most basic form of AI-assisted development.
+
+You start typing:
+
+public User findUserById(Long id) {
+
+AI predicts something like:
+
+    return userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException(id));
+}
+
+The important characteristic is:
+
+You are driving the development. AI is predicting/suggesting.
+
+Mental model
+YOU → type
+       ↓
+AI → suggest
+       ↓
+YOU → accept/reject
+
+It is excellent for:
+
+boilerplate
+repetitive code
+syntax
+common patterns
+small functions
+converting comments into code
+
+But it normally does not mean:
+
+"Understand my entire application and implement this feature."
+
+That's where higher levels of assistance begin.
+
+3. Ask
+
+Ask is conversational assistance.
+
+Instead of asking AI to modify the project, you ask it to explain, analyze, answer, or suggest.
+
+For example:
+
+"What does UserService.java do?"
+
+The AI might inspect the relevant code and explain:
+
+UserService is responsible for:
+
+
+1. Creating users
+2. Finding users
+3. Updating users
+4. Deleting users
+
+
+It communicates with UserRepository
+and performs validation before saving.
+
+Another example:
+
+"Why is this test failing?"
+
+The AI analyzes the code and explains the likely cause.
+
+Mental model
+YOU
+ ↓
+Question
+ ↓
+AI
+ ↓
+Answer / Explanation
+
+Usually:
+
+Ask = understand
+
+The human remains responsible for deciding what should actually change.
+
+4. Plan
+
+Plan sits between Ask and Agent.
+
+Instead of asking:
+
+"What should I do?"
+
+you ask something closer to:
+
+"How should I implement this?"
+
+The AI analyzes the project and creates a sequence of steps.
+
+Example:
+
+"Add CSV export for the customer list."
+
+A plan might be:
+
+Plan
+
+
+1. Inspect CustomerController
+2. Inspect CustomerService
+3. Add CSV generation utility
+4. Add /customers/export endpoint
+5. Set Content-Type to text/csv
+6. Add unit tests
+7. Add controller integration test
+8. Run existing test suite
+
+Notice something important:
+
+The plan itself is not necessarily the implementation.
+
+It is the reasoning/design phase before execution.
+
+Mental model
+Goal
+ ↓
+AI investigates
+ ↓
+AI thinks about approach
+ ↓
+Plan
+ ↓
+Human reviews
+ ↓
+Implementation can begin
+
+This is especially useful when the task is too large for one simple prompt.
+
+5. Agent
+
+An Agent goes one step further.
+
+Instead of only telling you what should be done, the agent can perform actions.
+
+For example:
+
+"Add CSV export for the customer list."
+
+The agent may:
+
+Understand task
+     ↓
+Inspect project
+     ↓
+Find relevant files
+     ↓
+Modify code
+     ↓
+Create tests
+     ↓
+Run tests
+     ↓
+Observe failure
+     ↓
+Modify code
+     ↓
+Run tests again
+     ↓
+Report result
+
+The key difference is:
+
+Plan proposes actions. Agent executes actions.
+
+Of course, exact capabilities and permission/approval behavior depend on the specific Copilot environment and configuration.
+
+6. Ask vs Plan vs Agent
+
+This is one of the most important things to explain in your knowledge sharing.
+
+Mode	Main purpose	Changes code?	Runs tools?	Typical question
+Ask	Understand	Usually no	Limited/contextual	"Why does this work this way?"
+Plan	Decide how	No/limited	Investigates	"How should I implement this?"
+Agent	Accomplish	Yes	Yes	"Implement this feature."
+
+Think about building a house.
+
+ASK
+
+
+"Why is the foundation designed this way?"
+
+
+       ↓
+
+
+PLAN
+
+
+"Give me a construction plan."
+
+
+       ↓
+
+
+AGENT
+
+
+"Build the house according to the plan."
+Another useful comparison
+Ask
+"What is wrong?"
+
+
+Plan
+"Here is how I would fix it."
+
+
+Agent
+"I will fix it."
+7. Instructions
+
+An instruction tells the AI how you want it to behave.
+
+For example:
+
+Always use Java 21.
+
+
+Follow our existing MVC architecture.
+
+
+Do not introduce a new framework unless necessary.
+
+
+Write unit tests for new business logic.
+
+
+Prefer existing utility classes over creating duplicates.
+
+This is different from your immediate task.
+
+Task
+
+"Add customer search."
+
+Instructions
+Use our existing MVC architecture.
+Use JUnit 5.
+Follow existing naming conventions.
+Do not modify database schema unless required.
+
+So:
+
+Instructions = HOW the AI should work
+
+
+Task = WHAT the AI should do
+
+This distinction is extremely important in agentic development.
+
+8. Custom Agents
+
+A Custom Agent is essentially a specialized AI worker configured for a particular role.
+
+Imagine your software team has:
+
+Developer
+QA Engineer
+Security Engineer
+Code Reviewer
+Documentation Engineer
+
+You can conceptually create agents with different responsibilities.
+
+Example: Code Review Agent
+
+Its instructions might be:
+
+You are a senior Java code reviewer.
+
+
+Check:
+
+
+- security problems
+- null handling
+- exception handling
+- performance
+- maintainability
+- test coverage
+
+
+Do not modify production code.
+Only report findings and recommendations.
+
+Now you can ask:
+
+"Review my authentication changes."
+
+Instead of repeatedly explaining the review rules, the custom agent already knows its role.
+
+Mental model
+General Agent
+      ↓
+Custom Agent
+      ↓
+Specialized behavior + instructions + tools/context
+
+Custom agents are particularly useful for establishing repeatable engineering workflows.
+
+9. Skills
+
+A skill is reusable knowledge/procedure that an agent can apply when performing a particular kind of work.
+
+Think of it as:
+
+"Here is how our organization performs this kind of task."
+
+For example, imagine your company has a deployment skill:
+
+Deployment Skill
+
+
+1. Check branch
+2. Run tests
+3. Build application
+4. Check configuration
+5. Verify environment variables
+6. Generate deployment package
+7. Run deployment validation
+
+The agent can use that knowledge when the task requires deployment-related work.
+
+Instructions vs Skills
+
+A useful simplified distinction is:
+
+Instructions
+    ↓
+How the agent should generally behave
+
+
+Skills
+    ↓
+Reusable knowledge/procedure for a particular capability
+
+For example:
+
+Instruction:
+"Always write tests."
+
+
+Skill:
+"Here is our standard procedure for writing Spring Boot integration tests."
+
+The exact implementation of "skills" can vary across AI development environments, so for your knowledge sharing, focus on the concept rather than treating the term as one universal technical mechanism.
+
+10. Context / References
+
+An AI cannot make good decisions if it doesn't have enough information.
+
+Suppose you tell an AI:
+
+"Add authentication."
+
+That's very vague.
+
+But suppose it can access:
+
+src/
+ ├── controller/
+ ├── service/
+ ├── repository/
+ ├── entity/
+ └── security/
+
+and relevant files such as:
+
+SecurityConfig.java
+User.java
+UserService.java
+UserRepository.java
+application.yml
+
+Now it has context.
+
+Context
+
+Context is the information available to the AI when it performs a task.
+
+It can include things such as:
+
+Source code
+Documentation
+Configuration
+Project structure
+Existing patterns
+Error messages
+Tests
+Git history
+User requirements
+References
+
+References are specific pieces of information you intentionally point the AI toward.
+
+For example:
+
+"Use UserService.java and SecurityConfig.java as references. Follow the existing authentication pattern."
+
+So a useful mental model is:
+
+Prompt
+ +
+Context
+ +
+References
+ +
+Instructions
+ ↓
+Better AI behavior
+11. Prompt Engineering
+
+Prompt Engineering is the practice of designing instructions/prompts so that an AI produces more useful results.
+
+Bad prompt:
+
+"Fix login."
+
+Better:
+
+"The login endpoint returns HTTP 500 when the user enters an incorrect password. Investigate the authentication flow, identify the root cause, and explain the problem. Do not modify code yet."
+
+Even better:
+
+"Investigate the HTTP 500 error in the login flow. Check the controller, authentication service, exception handling, and relevant tests. Identify the root cause, explain why it happens, and propose a minimal fix. Do not modify files yet."
+
+The prompt becomes:
+
+Goal
++
+Context
++
+Constraints
++
+Expected output
+A useful formula
+Good Prompt
+=
+Goal
++ Context
++ Constraints
++ Expected Result
+
+Prompt engineering mainly focuses on:
+
+How should I communicate with the AI?
+
+12. Context Engineering
+
+This is a more advanced concept and very important for agentic development.
+
+Prompt engineering asks:
+
+"What should I say to the AI?"
+
+Context engineering asks:
+
+"What information should the AI have available to make a good decision?"
+
+Consider this request:
+
+"Fix the payment bug."
+
+If the AI only sees:
+
+PaymentController.java
+
+it may make a poor decision.
+
+But if it has:
+
+PaymentController
+PaymentService
+PaymentRepository
+PaymentGateway
+configuration
+database schema
+related tests
+error logs
+architecture documentation
+
+it can reason much better.
+
+So:
+
+Prompt Engineering
+        ↓
+Improve the instruction
+
+
+Context Engineering
+        ↓
+Improve the information available to the AI
+Very simple analogy
+
+Imagine asking a doctor:
+
+"I don't feel well."
+
+That's the prompt.
+
+Giving the doctor:
+
+Symptoms
+Medical history
+Current medication
+Test results
+Previous diagnosis
+
+is context.
+
+Better context → better decision-making.
+
+For software agents:
+
+Prompt
+   +
+Relevant code
+   +
+Documentation
+   +
+Architecture
+   +
+Rules
+   +
+Tools
+   ↓
+Agent
+13. Tools
+
+An agent becomes much more powerful when it can use tools.
+
+Without tools:
+
+AI
+ ↓
+Think
+ ↓
+Generate answer
+
+With tools:
+
+AI
+ ↓
+Think
+ ↓
+Use tool
+ ↓
+Observe result
+ ↓
+Think again
+ ↓
+Use another tool
+
+Examples of tools:
+
+File search
+File editing
+Terminal
+Git
+Compiler
+Test runner
+Browser
+Database
+API
+Issue tracker
+Documentation search
+
+For example:
+
+"Fix the failing tests."
+
+Agent:
+
+1. Search test files
+2. Run tests
+3. Read error
+4. Inspect implementation
+5. Modify code
+6. Run tests again
+7. Confirm success
+
+Tools are what allow the AI to move from conversation toward action.
+
+14. Agentic Loop
+
+This is probably one of the most important concepts to understand.
+
+An agent usually works through an iterative loop.
+
+       ┌──────────────┐
+       │     Goal     │
+       └──────┬───────┘
+              ↓
+       ┌──────────────┐
+       │     Plan     │
+       └──────┬───────┘
+              ↓
+       ┌──────────────┐
+       │    Action    │
+       │    / Tool    │
+       └──────┬───────┘
+              ↓
+       ┌──────────────┐
+       │   Observe    │
+       │    Result    │
+       └──────┬───────┘
+              ↓
+       ┌──────────────┐
+       │    Reason    │
+       └──────┬───────┘
+              ↓
+          Complete?
+          /       \
+        No         Yes
+        ↓           ↓
+      Action      Finish
+        ↑
+        └───────────
+Example
+
+You say:
+
+"Fix the failing customer test."
+
+The agent might do:
+
+Goal:
+Fix failing customer test
+
+
+↓
+Inspect test
+
+
+↓
+Run test
+
+
+↓
+Observe:
+Expected 200
+Actual 500
+
+
+↓
+Inspect CustomerService
+
+
+↓
+Find NullPointerException
+
+
+↓
+Modify code
+
+
+↓
+Run test again
+
+
+↓
+Observe:
+Test passes
+
+
+↓
+Done
+
+The important word is loop.
+
+The agent doesn't necessarily produce one answer and stop.
+
+It can:
+
+Think → Act → Observe → Think → Act → Observe...
+
+until the goal is satisfied or it reaches a boundary.
+
+15. MCP
+
+MCP = Model Context Protocol.
+
+The easiest way to understand MCP is:
+
+A standardized way for AI applications/agents to connect to external tools and sources of context.
+
+Imagine every tool company invented its own connector:
+
+AI → GitHub connector
+AI → Database connector
+AI → Jira connector
+AI → Slack connector
+AI → Internal API connector
+
+That can become difficult to manage.
+
+MCP provides a common protocol/interface for exposing capabilities and information to AI applications.
+
+Conceptually:
+
+                 ┌── GitHub
+                 │
+AI Application ──┼── Database
+                 │
+                 ├── Jira
+                 │
+                 ├── Files
+                 │
+                 └── Internal systems
+
+An MCP server can expose things such as:
+
+Tools
+Resources
+Prompts
+
+For example, a hypothetical company MCP server might expose:
+
+Company MCP Server
+
+
+Tools:
+  searchEmployee()
+  createTicket()
+  searchIncident()
+
+
+Resources:
+  architecture documentation
+  coding standards
+  API documentation
+
+Then an AI agent can use those capabilities through the MCP interface.
+
+Very simple analogy
+
+Think of MCP like USB for AI integrations.
+
+USB doesn't define what your keyboard or camera does internally.
+
+It provides a standardized way for devices to communicate with a computer.
+
+MCP similarly provides a standardized way for AI applications to interact with external capabilities/context.
+
+16. Multi-Agent Systems
+
+A Multi-Agent System uses multiple specialized agents instead of one general-purpose agent doing everything.
+
+Imagine a software team:
+
+                User Goal
+                    ↓
+             ┌─────────────┐
+             │ Orchestrator│
+             └──────┬──────┘
+                    ↓
+       ┌────────────┼────────────┐
+       ↓            ↓            ↓
+   Developer       QA         Security
+    Agent         Agent         Agent
+       ↓            ↓            ↓
+     Code         Tests       Analysis
+       └────────────┼────────────┘
+                    ↓
+                Final Result
+Example
+
+Requirement:
+
+"Add a new payment API."
+
+A multi-agent workflow could conceptually be:
+
+Architect Agent
+
+Design the API
+
+↓
+
+Developer Agent
+
+Implement the API
+
+↓
+
+Test Agent
+
+Create and execute tests
+
+↓
+
+Security Agent
+
+Check authentication,
+authorization and vulnerabilities
+
+↓
+
+Reviewer Agent
+
+Review final implementation
+
+This is similar to having a virtual engineering team.
+
+17. How All These Concepts Connect
+
+This is the picture I recommend remembering for your knowledge sharing:
+
+                         AGENTIC DEVELOPMENT
+                                  │
+                                  ↓
+                              User Goal
+                                  │
+                                  ↓
+                           ┌─────────────┐
+                           │   Context   │
+                           │ References  │
+                           └──────┬──────┘
+                                  │
+                                  ↓
+                           ┌─────────────┐
+                           │ Instructions│
+                           │    Skills   │
+                           └──────┬──────┘
+                                  │
+                                  ↓
+                              AI Agent
+                                  │
+                     ┌────────────┼────────────┐
+                     ↓            ↓            ↓
+                   Plan         Tools        Context
+                     │            │
+                     └──────┬─────┘
+                            ↓
+                       Agentic Loop
+                            │
+                   ┌────────┴────────┐
+                   ↓                 ↓
+                 Action            Observe
+                   ↑                 │
+                   └───────Reason────┘
+                            │
+                            ↓
+                         Result
+
+And MCP can sit underneath the tool/context layer:
+
+                    AI Agent
+                       │
+                       ↓
+                 Agentic Loop
+                       │
+              ┌────────┴────────┐
+              ↓                 ↓
+            Tools            Context
+              │                 │
+              └────────┬────────┘
+                       ↓
+                      MCP
+                       │
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+     GitHub          Jira          Database
+18. The Evolution You Should Explain
+
+A very effective knowledge-sharing narrative is this progression:
+
+Level 1
+Code Completion
+    ↓
+"AI writes this line/function for me."
+
+
+Level 2
+Ask
+    ↓
+"AI explains/analyzes this for me."
+
+
+Level 3
+Plan
+    ↓
+"AI investigates and tells me how to solve this."
+
+
+Level 4
+Agent
+    ↓
+"AI executes the solution for me."
+
+
+Level 5
+Agent + Tools + Context
+    ↓
+"AI can work with my real development environment."
+
+
+Level 6
+Agent + MCP + Skills + Custom Agents
+    ↓
+"AI can work with organizational knowledge and external systems."
+
+
+Level 7
+Multi-Agent Systems
+    ↓
+"Multiple specialized AI workers collaborate on larger tasks."
+
+This gives you a very natural way to explain why agentic development exists.
+
+19. One Example That Connects Everything
+
+Suppose the requirement is:
+
+"Add a password reset feature."
+
+Code Completion
+
+AI helps write:
+
+public void resetPassword(...) {
+    ...
+}
+Ask
+
+You ask:
+
+"How does authentication currently work in this application?"
+
+AI explains the architecture.
+
+Plan
+
+You ask:
+
+"Create an implementation plan for password reset."
+
+AI proposes:
+
+1. Add reset-token entity
+2. Add repository
+3. Add service
+4. Add email notification
+5. Add API
+6. Add validation
+7. Add tests
+Agent
+
+You say:
+
+"Implement the plan."
+
+The agent:
+
+Search
+ ↓
+Read
+ ↓
+Modify
+ ↓
+Test
+ ↓
+Observe
+ ↓
+Fix
+ ↓
+Test again
+Instructions
+
+Your project says:
+
+Use Java 21.
+Follow MVC.
+Use JUnit 5.
+Do not introduce unnecessary dependencies.
+
+The agent follows those rules.
+
+Custom Agent
+
+You have a:
+
+Security Review Agent
+
+It reviews the password reset implementation.
+
+Skills
+
+The agent uses your organization's:
+
+Authentication implementation skill
+Testing skill
+Security review skill
+Context / References
+
+The agent uses:
+
+SecurityConfig
+UserService
+UserRepository
+existing authentication documentation
+coding standards
+existing tests
+Tools
+
+It uses:
+
+File search
+File editing
+Terminal
+Maven
+Git
+Test runner
+Agentic Loop
+Run test
+ ↓
+Failure
+ ↓
+Analyze
+ ↓
+Modify
+ ↓
+Run test
+ ↓
+Pass
+MCP
+
+Suppose the agent needs:
+
+Company API documentation
+Jira ticket
+Internal authentication service
+
+Those systems can potentially be exposed to the AI through MCP-based integrations.
+
+Multi-Agent
+
+Finally:
+
+Architect Agent
+       ↓
+Developer Agent
+       ↓
+QA Agent
+       ↓
+Security Agent
+       ↓
+Reviewer Agent
+
+Now you have something much closer to an AI-powered software engineering workflow rather than simple code generation.
+
+20. The Most Important Distinctions
+
+For your presentation, I would emphasize these five:
+
+① Code Completion vs Agent
+Code Completion:
+"Here's some code."
+
+
+Agent:
+"I'll work toward completing the task."
+② Ask vs Plan
+Ask:
+"Explain the problem."
+
+
+Plan:
+"Figure out how we should solve it."
+③ Plan vs Agent
+Plan:
+"Here are the steps."
+
+
+Agent:
+"I'll execute the steps."
+④ Prompt Engineering vs Context Engineering
+Prompt Engineering:
+"What should I tell the AI?"
+
+
+Context Engineering:
+"What information should the AI have?"
+⑤ Single Agent vs Multi-Agent
+Single Agent:
+One AI worker with multiple capabilities.
+
+
+Multi-Agent:
+Multiple specialized AI workers collaborating.
+21. A One-Minute Explanation You Can Give Tomorrow
+
+If someone asks you:
+
+"So, what exactly is Agentic Development?"
+
+A concise answer would be:
+
+Agentic Development is a software-development approach where AI agents work toward a development goal rather than simply generating code. The agent can understand project context, create or follow a plan, use tools such as file search, terminal and test runners, observe the results, and iterate until the task is completed or human intervention is required.
+
+Code completion helps write code, Ask helps us understand, Plan helps decide how to solve a problem, and Agent helps execute the solution. Instructions, context, references, skills, and tools provide the agent with the rules, knowledge, and capabilities it needs. The agentic loop—reason, act, observe, and repeat—is what allows the agent to work iteratively. MCP provides a standardized way to connect AI applications with external tools and context, while multi-agent systems allow specialized agents to collaborate on larger engineering tasks.
